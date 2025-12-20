@@ -14,7 +14,6 @@ DB_PASS = os.getenv("DB_PASS")
 DB_NAME = os.getenv("DB_NAME")
 
 def safe_int_field(x):
-    """Convert x to int or return None if empty/invalid."""
     try:
         if x is None or str(x).strip() == '':
             return None
@@ -23,10 +22,6 @@ def safe_int_field(x):
         return None
 
 def parse_height(height_str):
-    """
-    Convert NBA API height string '6-7' to total inches (79).
-    Returns None if empty or invalid.
-    """
     try:
         if not height_str or height_str.strip() == '':
             return None
@@ -44,7 +39,6 @@ def get_connection():
     )
 
 def fetch_player_ids():
-    """Get all player_ids already in PlayerStatsRegularSeason table."""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT DISTINCT player_id FROM PlayerStatsRegularSeason")
@@ -55,7 +49,6 @@ def fetch_player_ids():
 
 
 def fetch_player_info(player_id, sleep_time=0.8):
-    """Fetch minimal CommonPlayerInfo for one player."""
     try:
         info = commonplayerinfo.CommonPlayerInfo(player_id=player_id, timeout=60).get_data_frames()[0]
         time.sleep(sleep_time)
@@ -84,7 +77,6 @@ def fetch_player_info(player_id, sleep_time=0.8):
 
 
 def upsert_player_info(rows):
-    """Batch upsert minimal player info."""
     conn = get_connection()
     cursor = conn.cursor()
 
